@@ -1,0 +1,42 @@
+# $Id$
+# Maintainer: Sergej Pupykin <arch+pub@sergej.pp.ru>
+# Contributor: sulaweyo <sledge.sulaweyo@gmail.com>
+
+pkgname=gerbera
+pkgver=1.2.0
+pkgrel=2
+pkgdesc="UPnP Media Server"
+arch=(i686 x86_64 armv7h)
+url="https://github.com/v00d00/gerbera"
+license=('GPL2')
+depends=('taglib' 'curl' 'sqlite' 'file' 'ffmpeg' 'gcc-libs' 'libupnp18'
+         'duktape' 'libexif' 'expat')
+makedepends=('cmake')
+install=gerbera.install
+options=('emptydirs')
+source=("$pkgname.tar.gz::https://github.com/v00d00/gerbera/archive/v$pkgver.tar.gz"
+        gerbera.sysusers
+        gerbera.tmpfiles)
+sha256sums=('a64fe5820aced590bcdc22600596dc8a41c0baf68d7c0ec5baf7a561ade820df'
+            '1bc4c4dfbe8e1d1f03ac703fa47b41bc0a2e3dd75c414fce6724d3709d9b249d'
+            '43ef629a98573a6c79b607109c1c650a3dfbeba61333cafeaad0799117b2ab53')
+
+build() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+  
+  sed -i 's/libupnp-1.8 libupnp/libupnp-1.8/g' cmake/FindLibUpnp.cmake
+  # config options can be found here: https://github.com/gerbera/gerbera/blob/master/CMakeLists.txt
+  cmake -DCMAKE_INSTALL_PREFIX=/usr -DWITH_AVCODEC=1 .
+  make
+}
+
+package() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  make DESTDIR="${pkgdir}/" install
+
+  install -dm755 "${pkgdir}"/var/lib/gerbera
+  install -dm755 "${pkgdir}"/etc/gerbera
+  install -Dm644 "${srcdir}/${pkgname}".tmpfiles "${pkgdir}"/usr/lib/tmpfiles.d/${pkgname}.conf
+  install -Dm644 "${srcdir}/${pkgname}".sysusers "${pkgdir}"/usr/lib/sysusers.d/${pkgname}.conf
+}
