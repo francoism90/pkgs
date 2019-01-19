@@ -41,6 +41,4 @@ package() {
   echo "/usr/lib/${_pkgname}-${_pkgver}" > ${pkgdir}/etc/ld.so.conf.d/${_pkgname}-${_pkgver}.conf
 }
 
-
-
 # vim: ts=2 sw=2 et:
