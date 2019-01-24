@@ -9,7 +9,7 @@ pkgdesc="UPnP Media Server"
 arch=(i686 x86_64 armv7h)
 url="https://github.com/v00d00/gerbera"
 license=('GPL2')
-depends=('taglib' 'curl' 'sqlite' 'file' 'ffmpeg' 'ffmpegthumbnailer' 'gcc-libs' 'libupnp18'
+depends=('taglib' 'curl' 'sqlite' 'file' 'ffmpeg' 'ffmpegthumbnailer' 'gcc-libs' 'libupnp>=1.8.4'
          'duktape' 'libexif' 'expat')
 makedepends=('cmake')
 install=gerbera.install

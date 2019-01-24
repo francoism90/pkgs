@@ -1,0 +1,35 @@
+# Maintainer: Francois Menning <f.menning@pm.me>
+# Contributor: Levente Polyak <anthraxx[at]archlinux[dot]org>
+# Contributor: Giovanni Scafora <giovanni@archlinux.org>
+# Contributor: kastor <kastor@fobos.org.ar>
+
+pkgname=libupnp
+pkgver=1.8.4
+pkgrel=1
+pkgdesc='Portable Open Source UPnP Development Kit'
+url='http://pupnp.sourceforge.net/'
+arch=('x86_64')
+license=('BSD')
+depends=('glibc')
+makedepends=('pkgconfig')
+install=libupnp.install
+source=(https://downloads.sourceforge.net/sourceforge/pupnp/${pkgname}-${pkgver}.tar.bz2)
+sha256sums=('188d3f786d92fe14191f17634d2d87847eee7d2b568a5257ea23262fec9973d6')
+
+prepare() {
+  cd ${pkgname}-${pkgver}
+  autoreconf -fiv
+}
+
+build() {
+  cd ${pkgname}-${pkgver}
+  ./configure \
+    --prefix=/usr \
+    --enable-reuseaddr
+  make
+}
+
+package() {
+  cd ${pkgname}-${pkgver}
+  make DESTDIR=${pkgdir} install
+}
