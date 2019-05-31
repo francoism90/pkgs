@@ -1,0 +1,32 @@
+#!/bin/sh
+
+post_install() {
+  groupadd -g 89 mysql &>/dev/null
+  useradd -u 89 -g mysql -d "/var/lib/mysql" -s /bin/false mysql &>/dev/null
+
+  if [[ ! -e "/var/lib/mysql" ]]; then
+    install -dm700 "/var/lib/mysql"
+    chown -R mysql:mysql "/var/lib/mysql" &>/dev/null
+  fi
+
+  echo ":: You need to initialize the MySQL data directory prior to starting"
+  echo "   the service. This can be done with mysql_install_db command, e.g.:"
+  echo "   mysqld --initialize --user=mysql --basedir=/usr --datadir=/var/lib/mysql"
+}
+
+post_upgrade() {
+  # show for feature release: 10.1 -> 10.2 -> 10.3 -> ...
+  if [ $(vercmp "${1%.*-*}" "${2%.*-*}") -ne 0 ]; then 
+    echo ":: MySQL was updated to a new feature release. To update the data run:"
+    echo "   systemctl restart mysqld.service && mysql_upgrade -u root -p"
+  fi
+}
+
+post_remove(){
+  if getent passwd mysql >/dev/null 2>&1; then
+    userdel mysql
+  fi
+  if getent group mysql >/dev/null 2>&1; then
+    groupdel mysql
+  fi
+}

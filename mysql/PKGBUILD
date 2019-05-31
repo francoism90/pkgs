@@ -1,0 +1,206 @@
+# Maintainer: Francois Menning <f.menning@pm.me>
+# Contributor: Muflone http://www.muflone.com/contacts/english/
+# Contributor: Bartłomiej Piotrowski <bpiotrowski@archlinux.org>
+# Contributor: Christian Hesse <mail@eworm.de>
+# Contributor: Rustam Tsurik <rustam.tsurik@gmail.com>
+# Contributor: Andrea Scarpino <andrea@archlinux.org>
+# Contributor: Douglas Soares de Andrade <douglas@archlinux.org>
+
+pkgname=('mysql' 'libmysqlclient' 'mysql-clients')
+pkgbase=mysql
+pkgver=8.0.16
+pkgrel=1
+pkgdesc='Fast SQL database server, community edition'
+arch=('x86_64')
+makedepends=('openssl' 'zlib' 'cmake' 'systemd-tools' 'libaio' 'jemalloc'
+             'rpcsvc-proto' 'libtirpc' 'icu' 'libedit' 'libevent' 're2'
+             'rapidjson' 'protobuf')
+license=('GPL')
+url="https://www.mysql.com/products/community/"
+source=("https://cdn.mysql.com/Downloads/MySQL-8.0/${pkgbase}-boost-${pkgver}.tar.gz"
+        'my-default.cnf'
+        'mysql.sysconfig'
+        '0001-arch-specific.patch'
+        '0002-systemd-sysusers-tmpfiles.patch')
+sha256sums=('7c936aa7bc9f4c462b24bade2e9abe1b3a6869ea19c46e78ec0a9b2a87a3d17f'
+            '223bac02e3900239cc43633ed698823b16913541a2f38d6c6b7016026d7e4921'
+            '203dcd22fea668477ac7123dbd9909fae72d3d07f8855417a669a9c94db072ae'
+            '8fbedfc2c5fe271ed13217feeceeac00202d2cb135e4283eeee2f9a13d6251af'
+            '9e585631cfe95da9d18df6c64fca370c0aff2b2cda5dc29f694579dab9d9f561')
+
+build() {
+  local _cmake_options=(
+    # build options
+    -DBUILD_CONFIG=mysql_release
+    -DCMAKE_BUILD_TYPE=RelWithDebInfo
+    -DCMAKE_C_FLAGS="${CFLAGS}"
+    -DCMAKE_CXX_FLAGS="${CXXFLAGS}"
+    -Wno-dev
+
+    # file paths
+    # /etc
+    -DSYSCONFDIR=/etc/mysql
+    # /run
+    -DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock
+    # /usr
+    -DCMAKE_INSTALL_PREFIX=/usr
+    # /usr/bin /usr/include
+    -DINSTALL_BINDIR=bin
+    -DINSTALL_SBINDIR=bin
+    -DINSTALL_INCLUDEDIR=include/mysql
+    # /usr/lib
+    -DINSTALL_LIBDIR=lib
+    -DINSTALL_PLUGINDIR=lib/mysql/plugin
+    # /usr/share
+    -DINSTALL_SHAREDIR=share
+    -DINSTALL_INFODIR=share/mysql/docs
+    -DINSTALL_SUPPORTFILESDIR=share/mysql
+    -DINSTALL_MYSQLSHAREDIR=share/mysql
+    -DINSTALL_DOCREADMEDIR=share/doc/mysql
+    -DINSTALL_DOCDIR=share/doc/mysql
+    -DINSTALL_MANDIR=share/man
+    # /var
+    -DMYSQL_DATADIR=/var/lib/mysql
+
+    # default settings
+    -DDEFAULT_CHARSET=utf8mb4
+    -DDEFAULT_COLLATION=utf8mb4_unicode_ci
+
+    # features
+    -DENABLED_LOCAL_INFILE=ON
+    -DPLUGIN_EXAMPLE=NO
+    -DPLUGIN_FEDERATED=NO
+    -DPLUGIN_FEEDBACK=NO
+    -DWITH_BOOST="../${pkgname}-${pkgver}/boost"
+    -DWITH_JEMALLOC=ON
+    -DWITH_LIBWRAP=OFF
+    -DWITH_LTO=OFF
+    -DWITH_PCRE=bundled
+    -DWITH_READLINE=ON
+    -DWITH_SSL=system
+    -DWITH_SYSTEM_LIBS=ON
+    -DWITH_SYSTEMD=yes
+    -DWITH_UNIT_TESTS=OFF
+    -DWITHOUT_EXAMPLE_STORAGE_ENGINE=ON
+    -DWITHOUT_FEDERATED_STORAGE_ENGINE=ON
+  )
+
+  mkdir build
+  cd build
+
+  cmake ../"$pkgbase-$pkgver" "${_cmake_options[@]}"
+
+  make
+}
+
+check() {
+  cd build/mysql-test
+
+  # Takes *really* long, so disabled by default.
+  #./mtr --parallel=5 --mem --force --max-test-fail=0
+}
+
+package_libmysqlclient(){
+  pkgdesc='MySQL client libraries'
+  depends=('bzip2' 'libaio' 'libsasl' 'lz4' 'lzo' 'openssl' 'xz' 'zlib')
+  conflicts=('libmariadbclient' 'mariadb-libs')
+  provides=("libmariadbclient=${pkgver}" "libmysqlclient=${pkgver}" "mariadb-libs=${pkgver}")
+
+  cd build
+
+  for dir in include libmysql libservices
+  do
+    make -C "${dir}" DESTDIR="${pkgdir}" install
+  done
+
+  install -m0755 -d "${pkgdir}/etc/mysql"
+  install -m0755 -d "${pkgdir}/usr/bin"
+  install -m0755 scripts/mysql_config "${pkgdir}/usr/bin/"
+  install -m0755 -d "${pkgdir}/usr/share/man/man1"
+  install -m0700 -d "${pkgdir}/var/lib/mysql"
+  install -m0644 -D "${srcdir}/my-default.cnf" "${pkgdir}/etc/mysql/my.cnf"
+  install -m0644 -D "$srcdir"/"$pkgbase-$pkgver"/support-files/mysql.m4 "$pkgdir"/usr/share/aclocal/mysql.m4
+
+  for man in mysql_config
+  do
+    install -m0644 "${srcdir}/${pkgbase}-${pkgver}/man/${man}.1" "${pkgdir}/usr/share/man/man1/${man}.1"
+  done
+}
+
+package_mysql-clients(){
+  pkgdesc='MySQL client tools'
+  depends=('libmysqlclient' 'jemalloc' 'libedit')
+  conflicts=('mariadb-clients')
+  provides=("mariadb-clients=${pkgver}" "mysql-clients=${pkgver}")
+
+  cd build
+
+  make -C "client" DESTDIR="${pkgdir}" install
+
+  # install man pages
+  install -d "${pkgdir}/usr/share/man/man1"
+  for man in mysql mysqladmin mysqlcheck mysqldump mysqlimport mysqlshow mysqlslap
+  do
+    install -D -m0644 "${srcdir}/${pkgbase}-${pkgver}/man/${man}.1" "${pkgdir}/usr/share/man/man1/${man}.1"
+  done
+
+  # provided by mysql
+  rm "${pkgdir}"/usr/bin/{mysql_config_editor,mysql_secure_installation,mysql_ssl_rsa_setup,mysqlpump,mysqltest}
+}
+
+package_mysql(){
+  pkgdesc='Fast SQL database server, community edition'
+  backup=('etc/mysql/my.cnf'
+          'etc/conf.d/mysql')
+  install="${pkgbase}.install"
+  depends=('mysql-clients' 'inetutils' 'systemd-libs' 'libxml2' 'zstd')
+  optdepends=('perl-dbd-mysql: for mysqlhotcopy, mysql_convert_table_format and mysql_setpermission')
+  conflicts=('mariadb')
+  provides=("mariadb=${pkgver}" "mysql=${pkgver}")
+  options=('emptydirs')
+
+  cd build
+
+  make DESTDIR="${pkgdir}" install
+
+  cd "$pkgdir"
+
+  # provided by libmysqlclient
+  rm usr/bin/mysql_config
+  rm -r usr/include/
+  rm usr/share/man/man1/mysql_config.1
+  rm -r usr/share/aclocal
+  rm usr/lib/lib*
+  rm usr/lib/mysql/plugin/authentication_ldap_sasl_client.so
+  rm -r usr/lib/pkgconfig/
+  
+  # provided by mysql-clients
+  rm usr/bin/{mysql,mysql_upgrade,mysqladmin,mysqlbinlog,mysqlcheck,mysqldump,mysqlimport,mysqlshow,mysqlslap}
+  rm usr/share/man/man1/{mysql,mysql_upgrade,mysqladmin,mysqlbinlog,mysqlcheck,mysqldump,mysqlimport,mysqlshow,mysqlslap}.1
+
+  # not needed
+  rm -r usr/{mysql-test,run}
+
+  # correct systemd location
+  mv usr/usr/lib/* usr/lib/
+  rm -r usr/usr
+
+  # Move somewhere else
+  mv usr/LICENSE.router usr/share/mysql/docs
+  mv usr/README.router usr/share/mysql/docs
+
+  # fix pkg permissions
+  chmod 755 "${pkgdir}/usr"
+
+   # Arch Linux specific patches:
+  #  * enable PrivateTmp for a little bit more security
+  #  * force preloading jemalloc for memory management
+  #  * fix path to our config
+  patch -Np1 < "${srcdir}/0001-arch-specific.patch"
+  patch -Np1 < "${srcdir}/0002-systemd-sysusers-tmpfiles.patch"
+
+  # create environment file
+  install -d -m0755 "${pkgdir}"/etc/conf.d
+  install -D -m0644 ${srcdir}/mysql.sysconfig ${pkgdir}/etc/conf.d/mysql.conf
+}
+
