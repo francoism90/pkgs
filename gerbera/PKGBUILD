@@ -18,8 +18,8 @@ source=("$pkgname.tar.gz::https://github.com/gerbera/gerbera/archive/v$pkgver.ta
         gerbera.sysusers
         gerbera.tmpfiles)
 sha256sums=('9c4509189eab6bff0fe183e1dd54ea8cb17d7fb0bc6e21bb5b1a8ccaaf6c60d9'
-            '1bc4c4dfbe8e1d1f03ac703fa47b41bc0a2e3dd75c414fce6724d3709d9b249d'
-            '452f5d4b5661e0262cb4a48d62a54f5f26d53c6d3aebf502cde072214a8b30d8')
+            '0d44981dd819dad18503d5e116838d085d49a04cc9ca7795f1aaeae1a90a9693'
+            '74872bf2d5ae518ef28af183442da3270431e9622a7687957d86657ca8b2cd81')
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
