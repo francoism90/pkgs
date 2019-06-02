@@ -1,2 +1,1 @@
-d /etc/gerbera 0755 gerbera gerbera -
-d /var/lib/gerbera 0750 gerbera gerbera -
+d /var/lib/gerbera 0700 gerbera gerbera -

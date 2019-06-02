@@ -1,0 +1,11 @@
+--- a/scripts/systemd/gerbera.service.cmake
++++ b/scripts/systemd/gerbera.service.cmake
+@@ -6,7 +6,7 @@
+ Type=simple
+ User=gerbera
+ Group=gerbera
+-ExecStart=${CMAKE_INSTALL_PREFIX}/bin/gerbera -c /etc/gerbera/config.xml
++ExecStart=${CMAKE_INSTALL_PREFIX}/bin/gerbera -c /var/lib/gerbera/config.xml
+ Restart=on-failure
+ RestartSec=5
+ 

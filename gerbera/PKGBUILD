@@ -15,11 +15,20 @@ makedepends=('cmake')
 install=gerbera.install
 options=('emptydirs')
 source=("$pkgname.tar.gz::https://github.com/gerbera/gerbera/archive/v$pkgver.tar.gz"
+        0001-fix-config-path.patch
         gerbera.sysusers
         gerbera.tmpfiles)
 sha256sums=('9c4509189eab6bff0fe183e1dd54ea8cb17d7fb0bc6e21bb5b1a8ccaaf6c60d9'
+            '8add2597ec123c28957c7fee8237e6068b023915d4ce8ac5345ebb0ce7230913'
             '0d44981dd819dad18503d5e116838d085d49a04cc9ca7795f1aaeae1a90a9693'
-            '74872bf2d5ae518ef28af183442da3270431e9622a7687957d86657ca8b2cd81')
+            '00221a763d89a411e605d2a1df1c5fb7c44d9dae6b02f861e1ba120ea904eab3')
+
+prepare() {
+  cd "${srcdir}/${pkgname}-${pkgver}"
+
+  # fix path to our config
+  patch -Np1 < "${srcdir}/0001-fix-config-path.patch"
+}
 
 build() {
   cd "${srcdir}/${pkgname}-${pkgver}"
@@ -35,7 +44,6 @@ package() {
   make DESTDIR="${pkgdir}/" install
 
   install -dm755 "${pkgdir}"/var/lib/gerbera
-  install -dm755 "${pkgdir}"/etc/gerbera
   install -Dm644 "${srcdir}/${pkgname}".tmpfiles "${pkgdir}"/usr/lib/tmpfiles.d/${pkgname}.conf
   install -Dm644 "${srcdir}/${pkgname}".sysusers "${pkgdir}"/usr/lib/sysusers.d/${pkgname}.conf
 }
