@@ -3,7 +3,7 @@
 # Contributor: sulaweyo <sledge.sulaweyo@gmail.com>
 
 pkgname=gerbera
-pkgver=1.3.1
+pkgver=1.3.2
 pkgrel=1
 pkgdesc="UPnP Media Server"
 arch=(i686 x86_64 armv7h)
@@ -18,7 +18,7 @@ source=("$pkgname.tar.gz::https://github.com/gerbera/gerbera/archive/v$pkgver.ta
         0001-fix-config-path.patch
         gerbera.sysusers
         gerbera.tmpfiles)
-sha256sums=('9c4509189eab6bff0fe183e1dd54ea8cb17d7fb0bc6e21bb5b1a8ccaaf6c60d9'
+sha256sums=('47515d5d9b640c31d114c74aa5532c3d6f40d6a8a60b00f1cb1cef7629d8d9db'
             '8add2597ec123c28957c7fee8237e6068b023915d4ce8ac5345ebb0ce7230913'
             '0d44981dd819dad18503d5e116838d085d49a04cc9ca7795f1aaeae1a90a9693'
             '00221a763d89a411e605d2a1df1c5fb7c44d9dae6b02f861e1ba120ea904eab3')
