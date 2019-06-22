@@ -118,7 +118,7 @@ package_libmysqlclient(){
   install -m0755 scripts/mysql_config "${pkgdir}/usr/bin/"
   install -m0755 -d "${pkgdir}/usr/share/man/man1"
   install -m0700 -d "${pkgdir}/var/lib/mysql"
-  install -m0644 -D "${srcdir}/my-default.cnf" "${pkgdir}/etc/mysql/my.cnf"
+  install -m0644 -D "${srcdir}/my-default.cnf" "${pkgdir}/etc/mysql/my.cnf.default"
   install -m0644 -D "$srcdir"/"$pkgbase-$pkgver"/support-files/mysql.m4 "$pkgdir"/usr/share/aclocal/mysql.m4
 
   for man in mysql_config
