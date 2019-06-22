@@ -74,7 +74,7 @@ build() {
     -DWITH_BOOST="../${pkgname}-${pkgver}/boost"
     -DWITH_JEMALLOC=ON
     -DWITH_LIBWRAP=OFF
-    -DWITH_LTO=OFF
+    -DWITH_LTO=ON
     -DWITH_PCRE=bundled
     -DWITH_READLINE=ON
     -DWITH_SSL=system
