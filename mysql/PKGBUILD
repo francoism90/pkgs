@@ -181,11 +181,11 @@ package_mysql(){
   # not needed
   rm -r usr/{mysql-test,run}
 
-  # correct systemd location
+  # move systemd location
   mv usr/usr/lib/* usr/lib/
   rm -r usr/usr
 
-  # Move somewhere else
+  # move somewhere else
   mv usr/LICENSE.router usr/share/mysql/docs
   mv usr/README.router usr/share/mysql/docs
 
