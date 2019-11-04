@@ -25,6 +25,7 @@ build() {
   cd ${pkgname}-${pkgver}
   ./configure \
     --prefix=/usr \
+    --enable-ipv6 \
     --enable-reuseaddr
   make
 }
