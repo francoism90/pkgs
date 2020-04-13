@@ -4,7 +4,7 @@
 # Contributor: kastor <kastor@fobos.org.ar>
 
 pkgname=libupnp
-pkgver=1.10.1
+pkgver=1.12.1
 pkgrel=1
 pkgdesc='Portable Open Source UPnP Development Kit'
 url='http://pupnp.sourceforge.net/'
@@ -14,7 +14,7 @@ depends=('glibc')
 makedepends=('pkgconfig')
 install=libupnp.install
 source=(https://downloads.sourceforge.net/sourceforge/pupnp/${pkgname}-${pkgver}.tar.bz2)
-sha256sums=('b97dad43f5fbb1dad34384389ab038823862348e9e5f6d649d845d512165ed92')
+sha256sums=('fc36642b1848fe5a81296d496291d350ecfc12b85fd0b268478ab230976d4009')
 
 prepare() {
   cd ${pkgname}-${pkgver}
