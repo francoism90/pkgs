@@ -9,31 +9,38 @@ arch=('any')
 url="https://github.com/vinceliuice/Qogir-kde"
 license=('GPL3')
 depends=('plasma-desktop')
-optdepends=('kvantum-qt5' 'qogir-gtk-theme-git' 'qogir-icon-theme-git' 'sddm') 
+optdepends=('kvantum-qt5' 'qogir-gtk-theme-git' 'qogir-icon-theme-git' 'sddm')
 makedepends=('git')
 source=(
-   "${_gitname}::git+https://github.com/vinceliuice/Qogir-kde.git"
-   'fix-installer-path.patch')
+  "${_gitname}::git+https://github.com/vinceliuice/Qogir-kde.git"
+  'fix-theme-installer-path.patch'
+)
 sha256sums=('SKIP'
-            '29778a6317eea1812ba86f30cb428d1169c823ae875e690584b143c0f2f50fce')
+          '29778a6317eea1812ba86f30cb428d1169c823ae875e690584b143c0f2f50fce')
 
 pkgver() {
-   cd ${_gitname}
-   printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+  cd ${_gitname}
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
 }
 
 prepare () {
-   export SRCDIR="$srcdir/$_gitname"
-   export PKGDIR="$pkgdir"
+  export SRCDIR="$srcdir/$_gitname"
+  export PKGDIR="$pkgdir"
 
-   cd "$SRCDIR"
-   patch -Np1 -i "$srcdir"/fix-installer-path.patch
+  cd "$SRCDIR"
+  patch -Np1 -i "$srcdir"/fix-theme-installer-path.patch
 }
 
 package() {
-   export SRCDIR="$srcdir/$_gitname"
-   export PKGDIR="$pkgdir"
-   
-   cd "$SRCDIR"
-   bash install.sh
+  export SRCDIR="$srcdir/$_gitname"
+  export PKGDIR="$pkgdir"
+
+  cd "$SRCDIR"
+  bash install.sh
+
+  # sddm
+  sddmdir="${pkgdir}/usr/share/sddm/themes"
+
+  install -dm755 "${sddmdir}"
+  cp -r sddm/Qogir "${sddmdir}"
 }
