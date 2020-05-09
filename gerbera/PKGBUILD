@@ -3,14 +3,14 @@
 # Contributor: sulaweyo <sledge.sulaweyo@gmail.com>
 
 pkgname=gerbera
-pkgver=1.4.0
+pkgver=1.5.0
 pkgrel=1
 pkgdesc="UPnP Media Server"
 arch=(i686 x86_64 armv7h)
 url="https://github.com/gerbera/gerbera"
 license=('GPL2')
 depends=('taglib' 'curl' 'sqlite' 'file' 'ffmpeg' 'ffmpegthumbnailer' 'gcc-libs' 'libupnp>=1.10.0'
-         'duktape' 'libexif' 'expat' 'libmatroska')
+         'duktape' 'libexif' 'expat' 'libmatroska' 'spdlog' 'pugixml')
 makedepends=('cmake')
 install=gerbera.install
 options=('emptydirs')
@@ -18,7 +18,7 @@ source=("$pkgname.tar.gz::https://github.com/gerbera/gerbera/archive/v$pkgver.ta
         0001-fix-config-path.patch
         gerbera.sysusers
         gerbera.tmpfiles)
-sha256sums=('904a9031c85ac805e4c139f363510226952683d7257acd1dee25ba1e97fd7651'
+sha256sums=('693a99b295bc79d842f036a6d04996d4676ac0791d65f3a1f7aab4badf9fb5ef'
             '8add2597ec123c28957c7fee8237e6068b023915d4ce8ac5345ebb0ce7230913'
             '0d44981dd819dad18503d5e116838d085d49a04cc9ca7795f1aaeae1a90a9693'
             '00221a763d89a411e605d2a1df1c5fb7c44d9dae6b02f861e1ba120ea904eab3')
