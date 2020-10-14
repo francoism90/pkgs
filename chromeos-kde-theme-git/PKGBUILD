@@ -16,7 +16,7 @@ source=(
   'fix-theme-installer-path.patch'
 )
 sha256sums=('SKIP'
-            '0cf1659c9501da22761c83fabbfdf3d45a665176e112c87937561a5d0a33610d')
+            '3c5ec095be345bc5e560c0f594e1afdef9b2ffef9e3de90c52673382ec85f729')
 
 pkgver() {
   cd ${_gitname}

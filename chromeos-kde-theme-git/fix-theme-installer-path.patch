@@ -1,10 +1,6 @@
 --- /install.sh
 --- /install.sh
-@@ -1,26 +1,16 @@
- #!/bin/bash
- 
--SRC_DIR=$(cd $(dirname $0) && pwd)
-+SRC_DIR="${SRCDIR}"
+@@ -4,23 +4,13 @@
  ROOT_UID=0
  
  # Destination directory
