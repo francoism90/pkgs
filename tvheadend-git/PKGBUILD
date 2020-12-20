@@ -22,6 +22,7 @@ depends=(
 )
 makedepends=(
     'git'
+    'cmake'
     'python'
 )
 optdepends=(
@@ -46,7 +47,7 @@ prepare() {
     export CFLAGS="${CFLAGS} -fcommon"
 
     ./configure \
-        --prefix=/usr
+        --prefix=/usr \
         --mandir=/usr/share/man/man1 \
         --python=python3 \
         --disable-ffmpeg_static \
