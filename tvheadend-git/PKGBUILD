@@ -2,8 +2,8 @@
 # Contributor: Dan Ziemba <zman0900@gmail.com>
 # Contributor: Benjamin Hedrich <kiwisauce (a) pagenotfound (dot) de>
 
-pkgname=tvheadend-git
 _gitname='tvheadend-git'
+pkgname=tvheadend-git
 pkgver=4.3.r1917.gecd05a21d
 pkgrel=1
 pkgdesc="TV streaming server for Linux"
@@ -57,13 +57,10 @@ prepare() {
         --disable-libtheora_static \
         --disable-libvorbis_static \
         --disable-libfdkaac_static
-    
-    make
 }
 
 build() {
     cd "${srcdir}/${_gitname}"
-
     make
 }
 
