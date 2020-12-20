@@ -2,7 +2,7 @@
 
 _gitname=chromeos-kde
 pkgname=chromeos-kde-theme-git
-pkgver=r28.55d0e85
+pkgver=r29.8dfa384
 pkgrel=1
 pkgdesc="ChromeOS theme for the KDE Plasma desktop."
 arch=('any')

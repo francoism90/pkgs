@@ -1,0 +1,82 @@
+# Maintainer: Francois Menning <f.menning@pm.me>
+# Contributor: Dan Ziemba <zman0900@gmail.com>
+# Contributor: Benjamin Hedrich <kiwisauce (a) pagenotfound (dot) de>
+
+pkgname=tvheadend-git
+_gitname='tvheadend-git'
+pkgver=4.3.r1917.gecd05a21d
+pkgrel=1
+pkgdesc="TV streaming server for Linux"
+arch=('i686' 'x86_64' 'arm' 'armv6h' 'armv7h' 'aarch64')
+url="https://tvheadend.org/"
+license=('GPL3')
+depends=(
+    'avahi'
+    'ffmpeg'
+    'libdvbcsa'
+    'libfdk-aac'
+    'openssl'
+    'pcre2'
+    'uriparser'
+)
+makedepends=(
+    'git'
+    'python'
+)
+optdepends=(
+    'xmltv: For an alternative source of programme listings'
+)
+provides=('tvheadend')
+conflicts=('tvheadend' 'hts-tvheadend' 'hts-tvheadend-svn' 'tvheadend-git')
+install=tvheadend.install
+backup=('etc/conf.d/tvheadend')
+source=("${_gitname}::git+https://github.com/tvheadend/tvheadend.git")
+md5sums=('SKIP')
+
+pkgver() {
+    cd "${srcdir}/${_gitname}"
+    git describe --long | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+prepare() {
+    cd "${srcdir}/${_gitname}"
+
+    # Work-around for GCC 10
+    export CFLAGS="${CFLAGS} -fcommon"
+
+    ./configure \
+        --prefix=/usr
+        --mandir=/usr/share/man/man1 \
+        --python=python3 \
+        --disable-ffmpeg_static \
+        --disable-libx264_static \
+        --disable-libx265_static \
+        --disable-libvpx_static \
+        --disable-libtheora_static \
+        --disable-libvorbis_static \
+        --disable-libfdkaac_static
+    make
+}
+
+build() {
+    cd "${srcdir}/${_gitname}"
+
+    make
+}
+
+package() {
+    cd "${srcdir}/${_gitname}"
+    make DESTDIR="$pkgdir/" install
+
+    install -D -m 644 "${srcdir}/${_gitname}/rpm/tvheadend.service" \
+        "$pkgdir/usr/lib/systemd/system/tvheadend.service"
+    sed -i 's|/etc/sysconfig|/etc/conf.d|g' \
+        "$pkgdir/usr/lib/systemd/system/tvheadend.service"
+
+    install -d "$pkgdir/etc/conf.d"
+    cat << EOF > "$pkgdir/etc/conf.d/tvheadend"
+# Configuration file for the tvheadend service.
+
+OPTIONS="-u hts -g video -6 --http_port 9981 --htsp_port 9982"
+EOF
+}
