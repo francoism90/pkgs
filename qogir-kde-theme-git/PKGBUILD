@@ -2,7 +2,7 @@
 
 _gitname=qogir-kde
 pkgname=qogir-kde-theme-git
-pkgver=r48.17ff307
+pkgver=r55.3e0fb43
 pkgrel=1
 pkgdesc="Qogir theme for the KDE Plasma desktop."
 arch=('any')
