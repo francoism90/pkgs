@@ -1,0 +1,33 @@
+# Maintainer: Balló György <ballogyor+arch at gmail dot com>
+# Contributor: Ainola
+
+pkgname=celluloid-git
+pkgver=0.20.r51.gc0ef87b
+pkgrel=1
+pkgdesc='Simple GTK+ frontend for mpv'
+arch=(x86_64)
+url='https://celluloid-player.github.io/'
+license=(GPL3)
+depends=(gtk3 mpv)
+makedepends=(meson)
+replaces=(gnome-mpv)
+source=("$pkgname::git+https://github.com/celluloid-player/celluloid.git")
+conflicts=('gnome-mpv' 'celluloid')
+provides=('gnome-mpv' 'celluloid')
+replaces=('gnome-mpv-git')
+sha256sums=('SKIP')
+
+pkgver() {
+  cd "$pkgname"
+  git describe --long --tags | sed -r 's/^v//;s/([^-]*-g)/r\1/;s/-/./g'
+}
+
+build() {
+  arch-meson $pkgname build
+  ninja -C build
+}
+
+package() {
+  DESTDIR="$pkgdir" meson install -C build
+}
+
