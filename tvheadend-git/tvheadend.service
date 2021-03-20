@@ -9,7 +9,7 @@ PrivateTmp=yes
 Environment=PID_DIR=/run/tvheadend
 User=tvheadend
 Group=tvheadend
-ExecStart=/usr/bin/tvheadend -c /etc/tvheadend -f -p ${PID_DIR}/tvheadend.pid -u tvheadend -g video
+ExecStart=/usr/bin/tvheadend -c /etc/tvheadend -f -p ${PID_DIR}/tvheadend.pid -C
 Restart=always
 
 [Install]
