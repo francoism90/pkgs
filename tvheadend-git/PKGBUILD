@@ -4,79 +4,91 @@
 
 _gitname='tvheadend-git'
 pkgname=tvheadend-git
-pkgver=4.3.r1917.gecd05a21d
+pkgver=4.3.r1947.gdbaa0f850
 pkgrel=1
 pkgdesc="TV streaming server for Linux"
 arch=('i686' 'x86_64' 'arm' 'armv6h' 'armv7h' 'aarch64')
 url="https://tvheadend.org/"
 license=('GPL3')
 depends=(
-    'avahi'
-    'ffmpeg'
-    'libdvbcsa'
-    'libfdk-aac'
-    'openssl'
-    'pcre2'
-    'uriparser'
-    'libavresample'
+  'avahi'
+  'ffmpeg'
+  'libavresample'
+  'libdvbcsa'
+  'libfdk-aac'
+  'libhdhomerun'
+  'libogg'
+  'libvpx'
+  'libtheora'
+  'libvorbis'
+  'opus'
+  'x264'
+  'x265'
+  'pngquant'
+  'openssl'
+  'pcre2'
+  'uriparser'
 )
 makedepends=(
-    'git'
-    'cmake'
-    'python'
+  'git'
+  'python'
 )
 optdepends=(
-    'xmltv: For an alternative source of programme listings'
+  'xmltv: For an alternative source of programme listings'
 )
+options=('!strip' 'emptydirs')
 provides=('tvheadend')
-conflicts=('tvheadend' 'hts-tvheadend' 'hts-tvheadend-svn' 'tvheadend-git')
-install=tvheadend.install
-backup=('etc/conf.d/tvheadend')
-source=("${_gitname}::git+https://github.com/tvheadend/tvheadend.git")
-md5sums=('SKIP')
+conflicts=('tvheadend')
+source=(
+  "${_gitname}::git+https://github.com/tvheadend/tvheadend.git"
+  tvheadend.service
+  tmpfile.conf
+  user.conf
+)
+sha512sums=('SKIP'
+            '136e92849769a422e5ca3501e84b366d88edd2efa264cdcab5a95307746be54a9de389280f4889083ad288677ad4f60925b5ca1add581f37dcbde561639bae82'
+            '1080c8a2530d1f16ab5304cdd81c9c9da23b281e44a4874f4921905c843d876831214af481f9be91a74291ed4a6a10684dbdfb8f926b51bbb6895b92d493b201'
+            '5e0475cfe1f915bd3269ba3e9e0ca6cc7e492988bfd4f1feafcbbd3e8b0276c228f0b08a4116f3213d12c0ea940eff0dc71601a6e6ddcda934964cf51a665539')
 
 pkgver() {
-    cd "${srcdir}/${_gitname}"
-    git describe --long | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
-}
-
-prepare() {
-    cd "${srcdir}/${_gitname}"
-
-    # Work-around for GCC 10
-    export CFLAGS="${CFLAGS} -fcommon"
-
-    ./configure \
-        --prefix=/usr \
-        --mandir=/usr/share/man/man1 \
-        --python=python3 \
-        --disable-ffmpeg_static \
-        --disable-libx264_static \
-        --disable-libx265_static \
-        --disable-libvpx_static \
-        --disable-libtheora_static \
-        --disable-libvorbis_static \
-        --disable-libfdkaac_static
+  cd "${srcdir}/${_gitname}"
+  git describe --long | sed 's/^v//;s/\([^-]*-g\)/r\1/;s/-/./g'
 }
 
 build() {
-    cd "${srcdir}/${_gitname}"
-    make
+  cd "${srcdir}/${_gitname}"
+
+  # Work-around for GCC 10
+  export CFLAGS="${CFLAGS} -fcommon"
+
+  ./configure \
+    --prefix=/usr \
+    --datadir=/var/lib \
+    --mandir=/usr/share/man/man1 \
+    --python=python3 \
+    --enable-avahi \
+    --enable-zlib \
+    --enable-pngquant \
+    --disable-ffmpeg_static --enable-ffmpeg \
+    --disable-libx264_static --enable-libx264 \
+    --disable-libx265_static --enable-libx265 \
+    --disable-libvpx_static --enable-libvpx \
+    --disable-libogg_static --enable-libogg \
+    --disable-libtheora_static --enable-libtheora \
+    --disable-libvorbis_static --enable-libvorbis \
+    --disable-libfdkaac_static --enable-libfdkaac \
+    --disable-libopus_static --enable-libopus \
+    --disable-hdhomerun_static --enable-hdhomerun_client
+
+  make
 }
 
 package() {
-    cd "${srcdir}/${_gitname}"
-    make DESTDIR="$pkgdir/" install
+  cd "${srcdir}/${_gitname}"
 
-    install -D -m 644 "${srcdir}/${_gitname}/rpm/tvheadend.service" \
-        "$pkgdir/usr/lib/systemd/system/tvheadend.service"
-    sed -i 's|/etc/sysconfig|/etc/conf.d|g' \
-        "$pkgdir/usr/lib/systemd/system/tvheadend.service"
+  make DESTDIR="$pkgdir/" install
 
-    install -d "$pkgdir/etc/conf.d"
-    cat << EOF > "$pkgdir/etc/conf.d/tvheadend"
-# Configuration file for the tvheadend service.
-
-OPTIONS="-u hts -g video -6 --http_port 9981 --htsp_port 9982"
-EOF
+  install -Dm 644 "${srcdir}/tvheadend.service" -t "${pkgdir}/usr/lib/systemd/system"
+  install -Dm 644 "${srcdir}/user.conf" "${pkgdir}/usr/lib/sysusers.d/tvheadend.conf"
+  install -Dm 644 "${srcdir}/tmpfile.conf" "${pkgdir}/usr/lib/tmpfiles.d/tvheadend.conf"
 }
