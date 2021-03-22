@@ -19,6 +19,7 @@ depends=(
   'libhdhomerun'
   'libogg'
   'libtheora'
+  'libva'
   'libvorbis'
   'libvpx'
   'openssl'
@@ -45,10 +46,12 @@ source=(
   tmpfile.conf
   user.conf
 )
-sha512sums=('SKIP'
-            'd29662ee47f2d0da98d444819f730a8c487999454d60d7397b0f67068300ab5111ffce18befc9fdef5ff8fa1925213716837ea44808fb934197e4a56f98de8a7'
-            '1080c8a2530d1f16ab5304cdd81c9c9da23b281e44a4874f4921905c843d876831214af481f9be91a74291ed4a6a10684dbdfb8f926b51bbb6895b92d493b201'
-            '5e0475cfe1f915bd3269ba3e9e0ca6cc7e492988bfd4f1feafcbbd3e8b0276c228f0b08a4116f3213d12c0ea940eff0dc71601a6e6ddcda934964cf51a665539')
+sha512sums=(
+  'SKIP'
+  'd29662ee47f2d0da98d444819f730a8c487999454d60d7397b0f67068300ab5111ffce18befc9fdef5ff8fa1925213716837ea44808fb934197e4a56f98de8a7'
+  '1080c8a2530d1f16ab5304cdd81c9c9da23b281e44a4874f4921905c843d876831214af481f9be91a74291ed4a6a10684dbdfb8f926b51bbb6895b92d493b201'
+  '5e0475cfe1f915bd3269ba3e9e0ca6cc7e492988bfd4f1feafcbbd3e8b0276c228f0b08a4116f3213d12c0ea940eff0dc71601a6e6ddcda934964cf51a665539'
+)
 
 pkgver() {
   cd "${srcdir}/${_gitname}"
@@ -66,20 +69,21 @@ build() {
     --datadir=/var/lib \
     --mandir=/usr/share/man/man1 \
     --python=python3 \
-    --enable-avahi \
-    --enable-zlib \
-    --enable-pngquant \
-    --enable-libav \
     --disable-ffmpeg_static --enable-ffmpeg \
-    --disable-libx264_static --enable-libx264 \
-    --disable-libx265_static --enable-libx265 \
-    --disable-libvpx_static --enable-libvpx \
+    --disable-hdhomerun_static --enable-hdhomerun_client \
+    --disable-libfdkaac_static --enable-libfdkaac \
     --disable-libogg_static --enable-libogg \
+    --disable-libopus_static --enable-libopus \
     --disable-libtheora_static --enable-libtheora \
     --disable-libvorbis_static --enable-libvorbis \
-    --disable-libfdkaac_static --enable-libfdkaac \
-    --disable-libopus_static --enable-libopus \
-    --disable-hdhomerun_static --enable-hdhomerun_client
+    --disable-libvpx_static --enable-libvpx \
+    --disable-libx264_static --enable-libx264 \
+    --disable-libx265_static --enable-libx265 \
+    --enable-avahi \
+    --enable-libav \
+    --enable-pngquant \
+    --enable-vaapi \
+    --enable-zlib
 
   make
 }
