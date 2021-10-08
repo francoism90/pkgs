@@ -1,8 +1,7 @@
-# Maintainer: Daniel Cafe
-# Contributor: 
+# Maintainer: Francois Menning <f.menning@pm.me>
 
 pkgname=qogir-gtk-theme-git
-pkgver=2021.02.09.r1.gb516967
+pkgver=2021.08.02.r9.g8219ad0
 pkgrel=1
 pkgdesc='Qogir is a flat Design theme for GTK'
 arch=('any')
@@ -27,7 +26,5 @@ package() {
   mkdir -p "${pkgdir}/usr/share/themes"
   ./install.sh \
     --dest "${pkgdir}/usr/share/themes" \
-    --theme standard \
-    --logo arch \
-    --image
+    --logo arch
 }
