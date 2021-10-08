@@ -2,7 +2,7 @@
 
 _gitname=qogir-kde
 pkgname=qogir-kde-theme-git
-pkgver=r55.3e0fb43
+pkgver=r64.4ec4369
 pkgrel=1
 pkgdesc="Qogir theme for the KDE Plasma desktop."
 arch=('any')
@@ -16,7 +16,7 @@ source=(
   'fix-theme-installer-path.patch'
 )
 sha256sums=('SKIP'
-          '29778a6317eea1812ba86f30cb428d1169c823ae875e690584b143c0f2f50fce')
+            '0329bc7a6656293cf5be4d65303f61351904f7c44b2e2c62a89b81a39b57a71e')
 
 pkgver() {
   cd ${_gitname}
@@ -35,6 +35,17 @@ package() {
   export SRCDIR="$srcdir/$_gitname"
   export PKGDIR="$pkgdir"
 
+  # Make sure destination paths exists
+  mkdir -p "${pkgdir}"/usr/share/aurorae/themes
+  mkdir -p "${pkgdir}"/usr/share/color-schemes
+  mkdir -p "${pkgdir}"/usr/share/plasma/desktoptheme
+  mkdir -p "${pkgdir}"/usr/share/plasma/look-and-feel
+  mkdir -p "${pkgdir}"/usr/share/Kvantum
+  mkdir -p "${pkgdir}"/usr/share/wallpapers
+  mkdir -p "${pkgdir}"/usr/share/plasma/plasmoids
+  mkdir -p "${pkgdir}"/usr/share/plasma/layout-templates
+
+  # Run install
   cd "$SRCDIR"
   bash install.sh
 

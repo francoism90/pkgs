@@ -1,7 +1,7 @@
 --- /install.sh
 --- /install.sh
-@@ -1,24 +1,15 @@
- #!/bin/bash
+@@ -1,24 +1,17 @@
+ #!/usr/bin/env bash
  
 -SRC_DIR=$(cd $(dirname $0) && pwd)
 +SRC_DIR="${SRCDIR}"
@@ -9,12 +9,10 @@
  
  # Destination directory
 -if [ "$UID" -eq "$ROOT_UID" ]; then
--  AURORAE_DIR="/usr/share/aurorae/themes"
--  SCHEMES_DIR="/usr/share/color-schemes"
--  PLASMA_DIR="/usr/share/plasma/desktoptheme"
--  LOOKFEEL_DIR="/usr/share/plasma/look-and-feel"
--  KVANTUM_DIR="/usr/share/Kvantum"
--  WALLPAPER_DIR="/usr/share/wallpapers"
+-  echo
+-  echo " Do not run this with sudo ! "
+-  echo
+-  exit 0
 -else
 -  AURORAE_DIR="$HOME/.local/share/aurorae/themes"
 -  SCHEMES_DIR="$HOME/.local/share/color-schemes"
@@ -22,6 +20,8 @@
 -  LOOKFEEL_DIR="$HOME/.local/share/plasma/look-and-feel"
 -  KVANTUM_DIR="$HOME/.config/Kvantum"
 -  WALLPAPER_DIR="$HOME/.local/share/wallpapers"
+-  PLASMOIDS_DIR="$HOME/.local/share/plasma/plasmoids"
+-  LAYOUT_DIR="$HOME/.local/share/plasma/layout-templates"
 -fi
 +AURORAE_DIR="${PKGDIR}/usr/share/aurorae/themes"
 +SCHEMES_DIR="${PKGDIR}/usr/share/color-schemes"
@@ -29,6 +29,8 @@
 +LOOKFEEL_DIR="${PKGDIR}/usr/share/plasma/look-and-feel"
 +KVANTUM_DIR="${PKGDIR}/usr/share/Kvantum"
 +WALLPAPER_DIR="${PKGDIR}/usr/share/wallpapers"
++PLASMOIDS_DIR="${PKGDIR}/usr/share/plasma/plasmoids"
++LAYOUT_DIR="${PKGDIR}/usr/share/plasma/layout-templates"
  
  THEME_NAME=Qogir
  COLOR_VARIANTS=('' '-light' '-dark')
