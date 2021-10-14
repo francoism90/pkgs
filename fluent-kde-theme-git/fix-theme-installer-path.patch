@@ -1,0 +1,33 @@
+--- /install.sh
+--- /install.sh
+@@ -1,6 +1,6 @@
+ #!/bin/bash
+ 
+-SRC_DIR="$(cd $(dirname $0) && pwd)"
++SRC_DIR="${SRCDIR}"
+ 
+ THEME_NAME=Fluent
+ THEME_VARIANTS=('' '-purple' '-pink' '-red' '-orange' '-yellow' '-green' '-grey')
+@@ -11,14 +11,14 @@
+ solid=
+ 
+ # Destination directory
+-AURORAE_DIR="$HOME/.local/share/aurorae/themes"
+-SCHEMES_DIR="$HOME/.local/share/color-schemes"
+-PLASMA_DIR="$HOME/.local/share/plasma/desktoptheme"
+-LOOKFEEL_DIR="$HOME/.local/share/plasma/look-and-feel"
+-KVANTUM_DIR="$HOME/.config/Kvantum"
+-WALLPAPER_DIR="$HOME/.local/share/wallpapers"
+-PLASMOIDS_DIR="$HOME/.local/share/plasma/plasmoids"
+-LAYOUT_DIR="$HOME/.local/share/plasma/layout-templates"
++AURORAE_DIR="${PKGDIR}/usr/share/aurorae/themes"
++SCHEMES_DIR="${PKGDIR}/usr/share/color-schemes"
++PLASMA_DIR="${PKGDIR}/usr/share/plasma/desktoptheme"
++LOOKFEEL_DIR="${PKGDIR}/usr/share/plasma/look-and-feel"
++KVANTUM_DIR="${PKGDIR}/usr/share/Kvantum"
++WALLPAPER_DIR="${PKGDIR}/usr/share/wallpapers"
++PLASMOIDS_DIR="${PKGDIR}/usr/share/plasma/plasmoids"
++LAYOUT_DIR="${PKGDIR}/usr/share/plasma/layout-templates"
+ 
+ # COLORS
+ CDEF=" \033[0m"                                     # default color

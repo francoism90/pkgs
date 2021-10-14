@@ -1,0 +1,58 @@
+# Maintainer: Francois Menning <f.menning@pm.me>
+
+_gitname=fluent-kde
+pkgname=fluent-kde-theme-git
+pkgver=r47.f1ac81e
+pkgrel=1
+pkgdesc="Fluent theme for the KDE Plasma desktop."
+arch=('any')
+url="https://github.com/vinceliuice/Fluent-kde"
+license=('GPL3')
+depends=('plasma-desktop')
+optdepends=('kvantum-qt5' 'fluent-gtk-theme-git' 'fluent-icon-theme-git' 'sddm')
+makedepends=('git')
+conflicts=('qogir-kde-theme-git')
+source=(
+  "${_gitname}::git+https://github.com/vinceliuice/Fluent-kde.git"
+  'fix-theme-installer-path.patch'
+)
+sha256sums=('SKIP'
+            'd8fc7197b74f30e2299a2ab94b2e3d1fcc810d66a3f5ac9ea2f3ce1c35b1a7d2')
+
+pkgver() {
+  cd ${_gitname}
+  printf "r%s.%s" "$(git rev-list --count HEAD)" "$(git rev-parse --short HEAD)"
+}
+
+prepare () {
+  export SRCDIR="$srcdir/$_gitname"
+  export PKGDIR="$pkgdir"
+
+  cd "$SRCDIR"
+  patch -Np1 -i "$srcdir"/fix-theme-installer-path.patch
+}
+
+package() {
+  export SRCDIR="$srcdir/$_gitname"
+  export PKGDIR="$pkgdir"
+
+  # Make sure destination paths exists
+  mkdir -p "${pkgdir}"/usr/share/aurorae/themes
+  mkdir -p "${pkgdir}"/usr/share/color-schemes
+  mkdir -p "${pkgdir}"/usr/share/plasma/desktoptheme
+  mkdir -p "${pkgdir}"/usr/share/plasma/look-and-feel
+  mkdir -p "${pkgdir}"/usr/share/Kvantum
+  mkdir -p "${pkgdir}"/usr/share/wallpapers
+  mkdir -p "${pkgdir}"/usr/share/plasma/plasmoids
+  mkdir -p "${pkgdir}"/usr/share/plasma/layout-templates
+
+  # Run install
+  cd "$SRCDIR"
+  bash install.sh
+
+  # sddm
+  sddmdir="${pkgdir}/usr/share/sddm/themes"
+
+  install -dm755 "${sddmdir}"
+  cp -r sddm/Fluent "${sddmdir}"
+}
