@@ -22,8 +22,8 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'pulseaudio: Audio support'
             'speech-dispatcher: Text-to-Speech'
             'hunspell-en_US: Spell checking, American English')
-conflicts('firefox-developer-edition')
-provides('firefox-developer-edition')
+conflicts=('firefox-developer-edition')
+provides=('firefox-developer-edition')
 options=(!emptydirs !makeflags !strip)
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz{,.asc}
         firefox-install-dir.patch
@@ -54,7 +54,7 @@ sha512sums=('3a752f0ef8816427dddbe64f26c16da12fa430dfbc94bf44945d54fd0d581a5191d
             'b66dbe7f262d036e5a5b895ab5b0dbb03313bca18b0823c001ef2dbaeb1a33169b57db0cf4dfd268499f28913845119902b5d62e8a6a9cc4820eb0ee2f322a1e'
             '624a2531b4b85b1ad2286f0a6529313d9ae8a543b9f799a1f06d564db003f126e7bb3b5a35c6ab2f28d0e495a399d97476df8436914ba637cf627b52c3ab6f8d'
             '2a46f450fa230b964bc105087d578574bebccc18c337d89860740caeb00ea798c69edc70b256d87437dc4e791d1d223dbb1b70531c32333d6b23fa3550d1d941'
-            '3b42fe7dc8f53952330e57f1e85b46c5bd4b0c4ebc2796e0f5230446d10a67cf0fcbaadcbbb30888a99d43ca888a4e753aa5ddfbf93269cc22a6f640ba611ea3'
+            '96d56ed8d14dd16cd44df5dc156d81a4426280cdd8bd61e71831b7555c4d4a256fca523ce53852f6f98a546bf20d92b9c63aeeaff7a06174b8da7a8028394397'
             'b579b73176c72a5ecf36e3f63bba08fdb8041ae99d54e5cab906660fed6a9cf2311f7ca1ec1649e451cc6d5a4b1e6060b974b1d7befe9c8df3c5a89c50383c17'
             'dcdaba2b51f8e7dc4fbfeb7c707581a136d8727a64352fb09f40e62c1bba03f66d4770d21bd9ea0b9a249314fd4ce273bb42efb7108db39bbbadf1d0ddb8e3aa'
             '70e0098da963540eb685184bf24e32c4b7ecb28a373d6c1792961bf3142f964af247c94774be0ae1e014c9e43bf4aee439cb45dcf882ad234bdb00709b3e71d9'
