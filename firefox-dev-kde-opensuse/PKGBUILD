@@ -1,13 +1,14 @@
-# Maintainer: Andrew Crerar <crerar@archlinux.org>
+# Maintainer: Francois Menning <f.menning@pm.me>
+# Contributor: Andrew Crerar <crerar@archlinux.org>
 # Contributor: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
 
 _pkgname=firefox-developer-edition
 _patchurl=https://raw.githubusercontent.com/openSUSE/firefox-maintenance/master
 
-pkgname=firefox-developer-edition-kde-opensuse
+pkgname=firefox-developer-edition-kde
 pkgver=94.0b9
 pkgrel=1
-pkgdesc="Developer Edition of the popular Firefox web browser"
+pkgdesc="Developer Edition of the popular Firefox web browser."
 arch=('x86_64')
 license=('MPL' 'GPL' 'LGPL')
 url="https://www.mozilla.org/firefox/channel/#developer"
@@ -21,7 +22,8 @@ optdepends=('networkmanager: Location detection via available WiFi networks'
             'pulseaudio: Audio support'
             'speech-dispatcher: Text-to-Speech'
             'hunspell-en_US: Spell checking, American English')
-replaces=('firefox-developer')
+conflicts('firefox-developer-edition')
+provides('firefox-developer-edition')
 options=(!emptydirs !makeflags !strip)
 source=(https://archive.mozilla.org/pub/firefox/releases/$pkgver/source/firefox-$pkgver.source.tar.xz{,.asc}
         firefox-install-dir.patch
@@ -148,7 +150,7 @@ ac_add_options --with-distribution-id=org.archlinux
 ac_add_options --with-unsigned-addon-scopes=app,system
 ac_add_options --allow-addon-sideload
 export MOZILLA_OFFICIAL=1
-export MOZ_APP_REMOTINGNAME=${_pkgname//-/}
+export MOZ_APP_REMOTINGNAME=firefox-developer-edition
 export MOZ_TELEMETRY_REPORTING=1
 export MOZ_REQUIRE_SIGNING=
 
@@ -167,7 +169,6 @@ ac_add_options --enable-default-toolkit=cairo-gtk3-wayland
 ac_add_options --enable-alsa
 ac_add_options --enable-jack
 ac_add_options --enable-crashreporter
-ac_add_options --enable-libproxy
 ac_add_options --disable-updater
 ac_add_options --disable-tests
 END
@@ -252,7 +253,7 @@ app.distributor.channel=$_pkgname
 app.partner.archlinux=archlinux
 END
 
-  local theme=aurora
+  local i theme=aurora
   for i in 16 22 24 32 48 64 128 256; do
     install -Dm644 browser/branding/$theme/default$i.png \
       "$pkgdir/usr/share/icons/hicolor/${i}x${i}/apps/$_pkgname.png"
