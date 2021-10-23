@@ -1,6 +1,8 @@
 # Maintainer: Francois Menning <f.menning@pm.me>
 # Contributor: Andrew Crerar <crerar@archlinux.org>
 # Contributor: Jan Alexander Steffens (heftig) <heftig@archlinux.org>
+# Contributor: Thaodan <theodorstormgrade@gmail.com>
+# Contributor: Weng Xuetian <wengxt@gmail.com>
 
 _pkgname=firefox-developer-edition
 _patchurl=https://raw.githubusercontent.com/openSUSE/firefox-maintenance/master
