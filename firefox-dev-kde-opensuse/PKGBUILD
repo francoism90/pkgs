@@ -133,6 +133,7 @@ ac_add_options --enable-rust-simd
 ac_add_options --enable-linker=lld
 ac_add_options --disable-elf-hack
 ac_add_options --disable-bootstrap
+# ac_add_options --with-ccache=sccache
 export CC='clang --target=x86_64-unknown-linux-gnu'
 export CXX='clang++ --target=x86_64-unknown-linux-gnu'
 export AR=llvm-ar
@@ -251,7 +252,7 @@ app.distributor.channel=$_pkgname
 app.partner.archlinux=archlinux
 END
 
-  local i theme=aurora
+  local theme=aurora
   for i in 16 22 24 32 48 64 128 256; do
     install -Dm644 browser/branding/$theme/default$i.png \
       "$pkgdir/usr/share/icons/hicolor/${i}x${i}/apps/$_pkgname.png"
