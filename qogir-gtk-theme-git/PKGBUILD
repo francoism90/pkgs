@@ -1,7 +1,7 @@
 # Maintainer: Francois Menning <f.menning@pm.me>
 
 pkgname=qogir-gtk-theme-git
-pkgver=2021.08.02.r9.g8219ad0
+pkgver=2021.08.02.r11.gf8e6a55
 pkgrel=1
 pkgdesc='Qogir is a flat Design theme for GTK'
 arch=('any')

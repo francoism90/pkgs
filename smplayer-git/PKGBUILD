@@ -1,0 +1,58 @@
+# Maintainer: Pieter Goetschalckx <3.14.e.ter at gmail dot com>
+# Contributors: Det, goetzc, Ner0, Lari Tikkanen, oke3, Flamelab, WAntilles
+
+_pkgname=smplayer
+
+pkgname=smplayer-svn
+pkgver=v21.8.0.9988.r7.g0365f5ce0
+pkgrel=1
+pkgdesc='Media player with built-in codecs that can play virtually all video and audio formats'
+arch=('x86_64')
+url='https://www.smplayer.info/'
+license=('GPL')
+depends=('qt5-script' 'hicolor-icon-theme' 'libx11' 'zlib' 'gcc-libs')
+makedepends=('qt5-tools' 'subversion')
+optdepends=('smplayer-themes-svn: icon themes collection'
+            'smplayer-skins-svn: skin themes collection'
+            'smtube-svn: browse and play YouTube videos'
+            'youtube-dl: YouTube videos and streaming'
+            'mplayer: backend for video playback'
+            'mpv: alternative modern backend')
+provides=('smplayer')
+conflicts=('smplayer')
+source=("${_pkgname}::git+https://github.com/smplayer-dev/smplayer.git"
+        0001-use-wayland-features.patch)
+sha256sums=('SKIP'
+            '9f790f84a5e67442bf9575a3f057e89f6003c315bbf83f4173aa8636543eda7a')
+
+pkgver() {
+  cd "$_pkgname"
+  git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+prepare() {
+  cd "${srcdir}/${_pkgname}"
+    patch -Np1 -i "$srcdir"/0001-use-wayland-features.patch
+}
+
+build() {
+  cd "${srcdir}/${_pkgname}"
+  export CXXFLAGS="${CXXFLAGS} ${CPPFLAGS}"
+
+  make \
+    PREFIX=/usr \
+    DOC_PATH="\\\"/usr/share/doc/smplayer\\\"" \
+    CFLAGS_EXTRA="${CFLAGS} ${CPPFLAGS} ${LDFLAGS}" \
+    all
+}
+
+package() {
+  cd "${srcdir}/${_pkgname}"
+
+  make \
+    PREFIX=/usr \
+    DOC_PATH=/usr/share/doc/smplayer \
+    DESTDIR="${pkgdir}" \
+    install
+}
+
