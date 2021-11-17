@@ -2,7 +2,7 @@
 
 _gitname=fluent-kde
 pkgname=fluent-kde-theme-git
-pkgver=r47.f1ac81e
+pkgver=r51.21b060f
 pkgrel=1
 pkgdesc="Fluent theme for the KDE Plasma desktop."
 arch=('any')
