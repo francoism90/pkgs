@@ -31,5 +31,6 @@ package() {
     --dest "${pkgdir}/usr/share/themes" \
     --theme all \
     --logo arch \
-    --tweaks image square
+    --tweaks image
+    # --tweaks image square
 }

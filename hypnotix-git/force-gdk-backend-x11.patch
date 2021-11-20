@@ -1,0 +1,6 @@
+--- a/usr/bin/hypnotix
++++ b/usr/bin/hypnotix
+@@ -1,2 +1,2 @@
+ #!/bin/sh
+-/usr/lib/hypnotix/hypnotix.py &
++GDK_BACKEND=x11 /usr/lib/hypnotix/hypnotix.py &
