@@ -2,13 +2,12 @@
 
 _gitname=fluent-kde
 pkgname=fluent-kde-theme-git
-pkgver=r51.21b060f
+pkgver=r67.f0a9603
 pkgrel=1
 pkgdesc="Fluent theme for the KDE Plasma desktop."
 arch=('any')
 url="https://github.com/vinceliuice/Fluent-kde"
 license=('GPL3')
-depends=('plasma-desktop')
 optdepends=('kvantum-qt5' 'fluent-gtk-theme-git' 'fluent-icon-theme-git' 'sddm')
 makedepends=('git')
 conflicts=('qogir-kde-theme-git')

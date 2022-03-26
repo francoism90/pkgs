@@ -1,0 +1,37 @@
+# Maintainer: Francois Menning <f.menning@pm.me>
+
+pkgname=fluent-gtk-theme-git
+pkgver=2022.01.15.r9.gbb6b9c5
+pkgrel=1
+pkgdesc='Fluent is a Fluent design theme for GNOME/GTK based desktop environments.'
+arch=('any')
+url='https://github.com/vinceliuice/Fluent-gtk-theme'
+license=('GPL3')
+depends=('gtk3' 'gtk4' 'gtk-engine-murrine' 'gtk-engines')
+makedepends=('git' 'sassc')
+optdepends=(
+  'fluent-icon-theme: Matching icon theme'
+  'fluent-cursor-theme: Matching cursor theme'
+)
+provides=('fluent-gtk-theme')
+conflicts=('fluent-gtk-theme')
+source=('git+https://github.com/vinceliuice/Fluent-gtk-theme.git')
+sha256sums=('SKIP')
+
+pkgver() {
+  cd Fluent-gtk-theme
+  git describe --long --tags | sed 's/\([^-]*-g\)/r\1/;s/-/./g'
+}
+
+package() {
+  cd Fluent-gtk-theme
+
+  install -dm755 "${pkgdir}/usr/share/themes"
+
+  ./install.sh \
+    --dest "${pkgdir}/usr/share/themes" \
+    --theme all \
+    --icon arch \
+    --tweaks solid
+    # --tweaks image square
+}
